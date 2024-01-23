@@ -1,5 +1,10 @@
 package com.utility;
+import java.io.File;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -11,6 +16,7 @@ import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
+import com.testCase.Base;
 
 public class ListenerClass implements ITestListener {
 	
@@ -18,6 +24,8 @@ public class ListenerClass implements ITestListener {
 	ExtentSparkReporter htmlReporter;
 	ExtentReports reports;
 	ExtentTest test;
+	
+	//TakeScreenshot screenshot;
 	
 	
 	public void configureExtentReport() {
@@ -67,6 +75,19 @@ public class ListenerClass implements ITestListener {
 		test=reports.createTest("Test name: "+result.getName());  //here it getname will return method name of our test
 		test.log(Status.FAIL,MarkupHelper.createLabel("Failed test case is:"+result.getName(), ExtentColor.RED) ); //here attaching  log to report
 
+		
+		//Taking screenshot of failed test
+		 TakesScreenshot screenshot = (TakesScreenshot) Base.driver;
+		 File src=screenshot.getScreenshotAs(OutputType.FILE);
+		 File destination=new File("screenshots/Failed.png");
+		 try {
+			FileUtils.copyFile(src, destination);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		 test.addScreenCaptureFromPath("screenshots/Failed.png");
 	}
 @Override
 public void onTestSuccess(ITestResult result) {
