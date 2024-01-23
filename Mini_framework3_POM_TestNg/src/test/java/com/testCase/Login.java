@@ -29,7 +29,7 @@ public class Login extends Base {
 	
 	@Test
 	public void FailTest() {
-		//Assert.assertTrue(false); //fail test for extent report 
+		Assert.assertTrue(false); //fail test for extent report 
 	}
 
 }
